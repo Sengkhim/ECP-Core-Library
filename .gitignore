@@ -1,9 +1,9 @@
-﻿# /appsettings.Development.json
-# /appsettings.json
-# /Program.cs
-# /Test
-# /Controller
-
+﻿/appsettings.Development.json
+/appsettings.json
+/Program.cs
+/Test
+/Controller
+/ECPLibrary.csproj
 
 *.rsuser
 *.suo
