@@ -1,9 +1,15 @@
-﻿/appsettings.Development.json
+﻿# Ignore configuration files
+/appsettings.Development.json
 /appsettings.json
+# Ignore Program.cs (if you want to ignore this file)
 /Program.cs
+# Ignore Test files
 /Test
+# Ignore Controller folder
 /Controller
+# Ignore ECPLibrary.csproj (if you want to ignore this project file)
 /ECPLibrary.csproj
+# Ignore Properties folder
 /Properties
 
 *.rsuser
