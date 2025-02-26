@@ -4,6 +4,7 @@
 /Test
 /Controller
 /ECPLibrary.csproj
+/Properties
 
 *.rsuser
 *.suo
