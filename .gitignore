@@ -7,8 +7,6 @@
 /Test
 # Ignore Controller folder
 /Controller
-# Ignore ECPLibrary.csproj (if you want to ignore this project file)
-/ECPLibrary.csproj
 # Ignore Properties folder
 /Properties
 /Migrations
