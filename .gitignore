@@ -11,6 +11,7 @@
 /ECPLibrary.csproj
 # Ignore Properties folder
 /Properties
+/Migrations
 
 *.rsuser
 *.suo

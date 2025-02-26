@@ -9,8 +9,8 @@ public sealed class ConfigurationModeling : IConfigurationModeling
 {
     public void Configuration(ModelBuilder builder)
     {
-        builder.Entity<IdentityUser<string>>().ToTable("Users");
-        builder.Entity<IdentityRole<string>>().ToTable("Roles");
+        builder.Entity<IdentityUser>().ToTable("Users");
+        builder.Entity<IdentityRole>().ToTable("Roles");
         builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
         builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
         builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");

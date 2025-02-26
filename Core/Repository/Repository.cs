@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using ECPLibrary.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,21 +8,26 @@ namespace ECPLibrary.Core.Repository;
 public class Repository<TEntity>(IEcpDatabase context) : IRepository<TEntity>
     where TEntity : class
 {
-
     public IQueryable<TEntity> Entities => context.Set<TEntity>();
 
     public async Task<TEntity?> GetByIdAsync(string id)
-        => await context.Set<TEntity>().FindAsync(id);
+        => await context
+            .Set<TEntity>()
+            .FindAsync(id);
 
     public async Task<IEnumerable<TEntity>> GetAllAsync()
-        => await context.Set<TEntity>().ToListAsync();
+        => await context
+            .Set<TEntity>()
+            .ToListAsync();
 
     public async Task<IQueryable<TEntity>> GetPagedResponseAsync(int pageNumber, int pageSize)
     {
         var query  = context.Set<TEntity>()
             .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize).AsNoTracking()
+            .Take(pageSize)
+            .AsNoTracking()
             .AsQueryable();
+        
         return await Task.FromResult(query);
     }
 
@@ -48,7 +54,8 @@ public class Repository<TEntity>(IEcpDatabase context) : IRepository<TEntity>
 
     public Task DeleteByIdAsync(string id)
     {
-        var data = context.Set<TEntity>().FindAsync(id);
+        Debug.Assert(context != null, nameof(context) + " != null");
+        var data = GetByIdAsync(id);
         context.Set<TEntity>().Remove(data.Result!);
         return Task.CompletedTask;
     }
@@ -58,6 +65,7 @@ public class Repository<TEntity>(IEcpDatabase context) : IRepository<TEntity>
         var result = context.Set<TEntity>()
             .AsQueryable()
             .Where(expression);
+        
         return await Task.FromResult(result);
     }
 }
