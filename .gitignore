@@ -10,6 +10,8 @@
 # Ignore Properties folder
 /Properties
 /Migrations
+/Dockerfile
+/docker-compose.yml
 
 *.rsuser
 *.suo
