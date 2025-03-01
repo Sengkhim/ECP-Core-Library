@@ -49,15 +49,18 @@ public static class ServiceDiscoveryExtension
     /// <returns>
     /// The extracted port number from the `ASPNETCORE_URLS` setting, or the default port (8080) if unavailable.
     /// </returns>
-    public static int GetPort(this IConfiguration config)
+    private static int GetPort(this IConfiguration config)
     {
         var url = config["ASPNETCORE_URLS"];
         if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.Absolute, out var uri))
         {
             return uri.Port;
         }
-        return 8080;
+        return 80;
     }
+
+    public static int GetPort()
+        => int.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_PORT") ?? "80");
 
     /// <summary>
     /// Constructs a base URL using the configured protocol and the first available IPv4 address of the host.
@@ -85,7 +88,8 @@ public static class ServiceDiscoveryExtension
     public static void HostUrl(this WebApplicationBuilder builder)
     {
         var config = builder.Configuration;
-        var host = config.Url(config.GetDeployType() ? "0.0.0.0" : Localhost);
+        // var host = config.Url(config.GetDeployType() ? "0.0.0.0" : Localhost);
+        var host =config["ASPNETCORE_URLS"]?.Replace("http://+", "localhost") ?? "localhost";
         builder.WebHost.UseUrls($"{host}:{config.GetPort()}");
     }
     
@@ -101,11 +105,14 @@ public static class ServiceDiscoveryExtension
 
         services.AddSingleton<IConsulClient>(new ConsulClient(options =>
         {
-            var consulUrl = config.GetDeployType() ? ConsulHost : $"{config.Url()}:8500";
-            options.Address = new Uri(consulUrl);
+            // var consulUrl = config.GetDeployType() ? ConsulHost : $"{config.Url()}:8500";
+            var consulHost = Environment.GetEnvironmentVariable("CONSUL_HOST") ?? "http://localhost:8500";
+            options.Address = new Uri(consulHost);
         }));
         
         services.EnsureAgentRegister();
+
+        services.AddScoped<IEcpServiceDiscovery, EcpServiceDiscovery>();
     }
 
     /// <summary>
